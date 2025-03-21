@@ -1,0 +1,17 @@
+div .CLASSIC {
+    width:69rem;
+    
+}
+div .LARGE {
+    width:75rem;
+    }
+div .SMALL {
+    width: 80rem;
+}
+.wrapped-content{
+    white-space: nowrap;
+
+overflow: hidden;
+
+text-overflow: ellipsis;
+}

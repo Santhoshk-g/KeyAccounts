@@ -1,0 +1,202 @@
+<template>
+  <lightning-card icon-name="standard:asset_action" title='Key Accounts Sales'>
+      <div class="slds-grid slds-wrap">
+          <div class="slds-col slds-large-size_2-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+              <div class="slds-box slds-box_small">
+              <span>
+                  <template if:true={kam}>
+                  <lightning-combobox label="Business" value={recordtype} required="true"
+                                      read-only="true"
+                                      options={business} onchange={handlebusinessChange}>
+                                      </lightning-combobox></template>
+                  <template if:true={Nonkam}>
+                  <lightning-combobox label="Business" value={recordtype} required="true"
+                                      options={business} onchange={handlebusinessChange}>
+                                      </lightning-combobox></template>
+                  <template if:true={PicklistValues}>                    
+                  <lightning-combobox label="Sales Area" value={sales} 
+                                      options={PicklistValues}
+                                      onchange={handlesalesareaChange}>
+                                      </lightning-combobox></template>
+                   <template if:true={PicklistValues2}>                  
+                  <lightning-combobox label="Account Type" value={accounttype} 
+                                      options={PicklistValues2} onchange={handleaccounttypeChange}>
+                                      </lightning-combobox></template>
+                  <lightning-combobox label="Account Program" value={accprogram} 
+                                      options={options} onchange={handleaccprogramChange}>
+                                      </lightning-combobox>
+                  
+                  <lightning-input label="From Date" 
+                                   type="date"
+                                   value={fromdate}
+                                   onchange={fromDateChange}>
+                                   </lightning-input>
+                  <lightning-input label="To Date" 
+                                   type="date"
+                                   value={todate}
+                                   onchange={toDateChange}>
+                                   </lightning-input>
+                  <br/>
+                  <lightning-button label="Submit"
+                                    variant="brand-outline" 
+                                    class="slds-var-m-around_xx-small"
+                                    onclick={submit}></lightning-button>
+                  <template if:true={Gdata}>                  
+                  <lightning-button label="Export"
+                                    variant="brand"
+                                    icon-name="utility:outcome" 
+                                    class="slds-var-m-around_xx-small"
+                                    onclick={exportData}></lightning-button></template>
+                  
+            </span>
+          </div></div>
+          <div class="slds-col slds-large-size_10-of-12 slds-medium-size_1-of-12 slds-size_1-of-12" >
+            <span>
+              <div style="margin-left: 3%" class="slds-text-color_destructive">
+                <b>{error}</b>
+              </div>
+          <template if:true={loaded}>
+              <lightning-spinner alternative-text="Loading"></lightning-spinner>
+          </template>
+          <template if:true={Inspire}>
+              <template if:true={Gdata}>
+                <div class="slds-scrollable" style="height:30%;width:100%">
+                <!--<table class="slds-table slds-table_cell-buffer slds-table_bordered">-->
+                  <table class="slds-table slds-table_cell-buffer slds-table_fixed-layout  slds-table_bordered ">
+                  <thead>
+                      <tr>
+                          <th>Account</th>
+                          <th>City</th>
+                          <th>Opportunity</th>
+                          <th>Region</th>
+                          <th>SalesArea</th>
+                          <th>TEQ</th>
+                          <th>AQ</th>
+                          
+                          
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <template for:each={groupedData} for:item="group">
+                          <tr key={group.AccountName}>
+                              <td class="slds-text-title_caps wrapped-content"><b>{group.AccountName}</b></td>
+
+
+                              <td>
+                                <template for:each={group.oppdata} for:item="person">
+                                  <div key={person}>{person.City}</div>
+                                </template>
+                              </td>
+                              
+                              <td>
+                                <template for:each={group.oppdata} for:item="person">
+                                       
+                               <div class="wrapped-content" key={person}>{person.opportunityName}</div> 
+                              </template>
+                              </td> 
+                              
+                              <td>
+                                <template for:each={group.oppdata} for:item="person">
+                                       
+                               <div key={person}>{person.opportunityRegion}</div> 
+                              </template>
+                              </td>
+                              <td>
+                                <template if:true={Inspire} for:each={group.oppdata} for:item="person">
+                                       
+                                 <div key={person}>{person.InspireSalesArea}</div>
+                                </template> </td>
+                                                
+                              <td>
+                                <template for:each={group.oppdata} for:item="person">
+                                       
+                               <div key={person}>{person.TotalEstimatedQuantity}</div> 
+                              </template>
+                              </td>
+                              <td>
+                                <template for:each={group.oppdata} for:item="person">
+                                       
+                               <div key={person}>{person.AppropriatedQuantity}</div> 
+                              </template>
+                              </td> 
+                              
+                            
+                      
+                          </tr>
+                      </template>
+                  </tbody>
+              </table></div></template>
+            </template>
+            <template if:true={Infinity}>
+            <template if:true={Gdata}>
+              
+              <div class="slds-scrollable" style="height:30%;width:100%">
+              <table class="slds-table_fixed-layout slds-table slds-table_cell-buffer slds-table_bordered">
+                
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>City</th>
+                        <th>Opportunity</th>
+                        <th>Region</th>
+                        <th>SalesArea</th>
+                        <th>TEQ</th>
+                        <th>AQ</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={groupedData} for:item="group">
+                        <tr key={group.AccountName}>
+                            <td class="slds-text-title_caps wrapped-content"><b>{group.AccountName}</b></td>
+
+                            <td>
+                              <template for:each={group.oppdata} for:item="person">
+                                <div key={person}>{person.City}</div>
+                              </template>
+                            </td>
+
+
+                            <td>
+                              <template for:each={group.oppdata} for:item="person">
+                                     
+                             <div class="wrapped-content" key={person}>{person.opportunityName}</div> 
+                            </template>
+                            </td> 
+                            
+                            <td>
+                              <template for:each={group.oppdata} for:item="person">
+                                     
+                             <div key={person}>{person.opportunityRegion}</div> 
+                            </template>
+                            </td>
+                            <td>
+                              <template for:each={group.oppdata} for:item="person">
+                                      
+                             <div key={person}>{person.InfinitySalesArea}</div>
+                            </template></td> 
+                                                       
+                            <td>
+                              <template for:each={group.oppdata} for:item="person">
+                                     
+                             <div key={person}>{person.TotalEstimatedQuantity}</div> 
+                            </template>
+                            </td>
+                            <td>
+                              <template for:each={group.oppdata} for:item="person">
+                                     
+                             <div key={person}>{person.AppropriatedQuantity}</div> 
+                            </template>
+                            </td> 
+                           
+                        </tr>
+                    </template>
+                </tbody>
+            </table></div></template>
+          </template>
+            </span>
+              
+          </div>
+        </div>
+</lightning-card>
+</template>
